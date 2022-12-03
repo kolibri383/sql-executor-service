@@ -10,7 +10,7 @@ class SqlExecuteService(
     @Autowired
     val sqlDao: SqlDao
 ) {
-    fun executeSelectQuery(sqlDto: SqlDto): List<Map<String, Any>> {
+    fun executeSelectQuery(sqlDto: SqlDto): List<Any> {
         return sqlDao.sqlExecute(sqlDto.query)
     }
 

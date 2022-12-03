@@ -11,7 +11,12 @@ class SqlDao(
     val jdbcTemplate: JdbcTemplate
 ) {
     @Transactional(readOnly = true)
-    fun sqlExecute(sql: String) :List<Map<String,Any>> {
-       return jdbcTemplate.queryForList(sql)
+    fun sqlExecute(sql: String) :List<Any> {
+        //try {
+            return jdbcTemplate.queryForList(sql)
+//        }catch (ex: SQLException){
+//            throw IncorrectSqlQuery(ex.message, sql)
+//        }
+//       return emptyList()
     }
 }
