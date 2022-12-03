@@ -3,6 +3,7 @@ package com.example.sqlexecutorservice.configuration
 import com.zaxxer.hikari.HikariDataSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
@@ -18,20 +19,30 @@ import org.springframework.transaction.PlatformTransactionManager
 import org.springframework.transaction.annotation.EnableTransactionManagement
 import java.lang.Boolean
 import javax.sql.DataSource
+import javax.xml.crypto.Data
 import kotlin.String
+import kotlin.apply
 
 
 @Configuration
 @ComponentScan
 @EnableTransactionManagement
 @PropertySource(value = ["classpath:application.yaml"])
-class AppConfig {
-    @Autowired
-    private val env: Environment? = null
-
+class AppConfig() {
     @Value("\${init-db:false}")
     private val initDatabase: String? = null
 
+    @Value("\${spring.flyway.driver-class-name}")
+    private val driver: String? = null
+
+    @Value("\${spring.flyway.url}")
+    private val url: String? = null
+
+    @Value("\${spring.flyway.user}")
+    private val user: String? = null
+
+    @Value("\${spring.flyway.password}")
+    private val dbPassword: String? = null
 
     @Bean
     fun jdbcTemplate(dataSource: DataSource?): JdbcTemplate {
@@ -43,13 +54,14 @@ class AppConfig {
         return DataSourceTransactionManager(dataSource!!)
     }
 
+
     @Bean
     fun dataSource(): DataSource {
         val dataSource = HikariDataSource().apply {
-            driverClassName = env?.getProperty("spring.datasource.driverClassName")
-            jdbcUrl = env?.getProperty("spring.datasource.url")
-            username = env?.getProperty("spring.datasource.username")
-            password = env?.getProperty("spring.datasource.password")
+            driverClassName = driver
+            jdbcUrl = url
+            username = user
+            password = dbPassword
         }
         return dataSource
     }
